@@ -42,4 +42,5 @@ jobs:
         #   username: ${{ secrets.DOCKER_USERNAME }}
         #   password: ${{ secrets.DOCKER_PASSWORD }}
       - name: run the docker container 
-        run: docker run -d -p 80:80 hello:latest
+        run: docker run -d -p 80:80 ${{ secrets.DOCKER_USERNAME }}/hello:latest
+        
