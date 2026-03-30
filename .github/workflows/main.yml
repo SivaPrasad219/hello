@@ -17,18 +17,12 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    environment: Docker
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-
-      - name: validate docker credentials
-        run: |
-          if [ -z "${{ secrets.DOCKER_USERNAME }}" ] || [ -z "${{ secrets.DOCKER_PASSWORD }}" ]; then
-            echo "DOCKER_USERNAME or DOCKER_PASSWORD secret is not set."
-            exit 1
-          fi
 
       - name: login to docker hub
         uses: docker/login-action@v3
@@ -41,3 +35,6 @@ jobs:
           docker build -t hello:latest .
           docker tag hello:latest ${{ secrets.DOCKER_USERNAME }}/hello:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/hello:latest
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
